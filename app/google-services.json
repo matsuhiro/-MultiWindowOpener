@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "537327720799",
+    "firebase_url": "https://multi-window-app.firebaseio.com",
+    "project_id": "multi-window-app",
+    "storage_bucket": "multi-window-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537327720799:android:f02d31f5a0ba1808",
+        "android_client_info": {
+          "package_name": "net.matsuhiro.multiwindowopener"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "537327720799-3hvsotekn8ndd3489rlv6qmknhk658al.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "net.matsuhiro.multiwindowopener",
+            "certificate_hash": "626FDA47A4FF8106CF81BDF2C01F00A1828570E4"
+          }
+        },
+        {
+          "client_id": "537327720799-n9edo7on7qrl1r36rt59bgi3ac1lbdlh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKfw3l3mxI7j-EGlK7fuPT6zHixkEslXo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "537327720799-n9edo7on7qrl1r36rt59bgi3ac1lbdlh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
