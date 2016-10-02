@@ -3,6 +3,7 @@ package net.matsuhiro.multiwindowopener
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
@@ -20,6 +21,9 @@ class AppItemView : FrameLayout {
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_app_item, this)
+        this.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        this.setPadding(0, 0, 3, 4)
+        this.clipToPadding = false
     }
 
     fun setAppInfo(appInfo: AppInfo) {

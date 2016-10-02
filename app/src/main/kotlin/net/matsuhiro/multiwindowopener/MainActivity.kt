@@ -3,9 +3,13 @@ package net.matsuhiro.multiwindowopener
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.ResolveInfo
+import android.graphics.Rect
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ListView
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.util.Log
+import android.view.View
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -26,10 +30,26 @@ class MainActivity : AppCompatActivity() {
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         val appInfos : MutableList<AppInfo> = mutableListOf()
-        val adapter = AppListAdapter(applicationContext)
-        adapter.appInfos = appInfos
-        val listView = findViewById(R.id.app_info_list) as ListView
-        listView.adapter = adapter
+        val recyclerView = findViewById(R.id.recycler_view) as RecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = AppListRecyclerViewAdapter(appInfos, object : AppListRecyclerViewAdapter.OnItemClickListener {
+            override fun onClick(pos: Int, view: View, info: AppInfo) {
+                val intent = Intent(Intent.ACTION_MAIN)
+                intent.addCategory(Intent.CATEGORY_LAUNCHER)
+                intent.component = ComponentName(info.packageName, info.activityName)
+                startActivityForResult(intent, 0)
+                sendLog(info.packageName)
+            }
+        })
+
+        val offset: Int = resources.displayMetrics.density.toInt() * 8
+        recyclerView.addItemDecoration(object: RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State): Unit{
+                val pos = (view.layoutParams as RecyclerView.LayoutParams).viewLayoutPosition
+                if (pos == 0) outRect.set(offset, offset, offset, offset)
+                else          outRect.set(offset,      0, offset, offset)
+            }
+        })
 
         rx.Observable.from(packageManager.queryIntentActivities(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER), 0))
                 .map { info: ResolveInfo ->
@@ -43,22 +63,13 @@ class MainActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object: rx.Observer<AppInfo> {
                     override fun onCompleted() {
-                        adapter.notifyDataSetChanged()
                     }
                     override fun onError(e: Throwable?) {}
                     override fun onNext(info: AppInfo) {
                         appInfos.add(info)
+                        recyclerView.adapter.notifyItemInserted(appInfos.size-1)
                     }
                 })
-
-        listView.setOnItemClickListener { adapterView, view, i, l ->
-            val info = appInfos[i]
-            val intent = Intent(Intent.ACTION_MAIN)
-            intent.addCategory(Intent.CATEGORY_LAUNCHER)
-            intent.component = ComponentName(info.packageName, info.activityName)
-            startActivityForResult(intent, 0)
-            sendLog(info.packageName)
-        }
     }
 
     private fun sendLog(packageName: String) : Unit {
